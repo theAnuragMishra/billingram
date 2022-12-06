@@ -1,0 +1,6 @@
+cn = sqltor.connect(host='remotemysql.com',
+                    user='AtRLZhnHtV',
+                    passwd='SdjF2OD1Bd',
+                    port='3306',
+                    database='AtRLZhnHtV')
+cur = cn.cursor()
