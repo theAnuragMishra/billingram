@@ -5,22 +5,22 @@ from prettytable import from_db_cursor
 
 
 def invoice_id_gen():
-    Initial = "Invoice"
+    initial = "Invoice"
     cur.execute("select Invoice_ID from Invoice_List")
     z = cur.fetchall()
     last_num = len(z)
     new_num = last_num + 1
-    gen_id = Initial + str(new_num)
+    gen_id = initial + str(new_num)
     return gen_id
 
 
 def customer_id_gen():
-    Initial = "Customer"
+    initial = "Customer"
     cur.execute("select Customer_ID from Customer_Data")
     z = cur.fetchall()
     last_num = len(z)
     new_num = last_num + 1
-    gen_id = Initial + str(new_num)
+    gen_id = initial + str(new_num)
     return gen_id
 
 
