@@ -54,9 +54,27 @@ def new_invoice(customer_name, mobile_number):
             i += 1
             Sno = i
             Item_Name = input("Item Name:")
-            Price_PU = float(input("Enter Price of the item:"))
-            Qty = int(input("Enter quantity:"))
-            Price = Price_PU * Qty
+            #adding validation for price
+            while True:
+                Price_PU = float(input("Enter Price of the item:"))
+                if int(Price_PU)<=2147483647:
+                    break
+                else:
+                    print('Enter valid price i.e., under Rs.2147483647')
+                    continue
+            #adding validation for final amount for that item
+            while True:
+                Qty = int(input("Enter quantity:"))
+                if Qty<=2147483647:
+                    Price = Price_PU * Qty
+                    if int(Price)<=2147483647:
+                        break
+                    else:
+                        print('please enter quantity correctly as total amount should be under Rs.2147483647')
+                        continue
+                else:
+                    print('Enter valid quantity')
+                    continue
             total_amount += Price
             cur.execute("INSERT INTO {inp} VALUES({},'{}',{},{},{})".format(
                 Sno, Item_Name, Price_PU, Qty, Price, inp=invoice_id))
