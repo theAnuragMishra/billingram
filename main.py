@@ -252,8 +252,8 @@ while True:
     choice = int(input("Enter your choice(1/2/3/4):"))
     # New Invoice
     if choice == 1:
+        customer_name = input("Enter customer name:")
         while True:
-            customer_name = input("Enter customer name:")
             mobile_number = input("Enter mobile number:")
             if mobile_number.isdigit() and len(mobile_number) == 10:
                 new_invoice(customer_name, mobile_number)
@@ -294,8 +294,8 @@ while True:
                 "Do you want to modify customer details?(Y/N):")
             if modify_maybe == 'Y':
                 print("Please enter new details of the customer:")
+                new_name = input("Enter Name:")
                 while True:
-                    new_name = input("Enter Name:")
                     new_number = input("Enter Mobile Number:")
                     if new_number.isdigit() and len(new_number) == 10:
                         modify_data(customer_name, mobile_number,
