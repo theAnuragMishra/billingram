@@ -54,9 +54,27 @@ def new_invoice(customer_name, mobile_number):
             i += 1
             Sno = i
             Item_Name = input("Item Name:")
-            Price_PU = float(input("Enter Price of the item:"))
-            Qty = int(input("Enter quantity:"))
-            Price = Price_PU * Qty
+            #adding validation for price
+            while True:
+                Price_PU = float(input("Enter Price of the item:"))
+                if int(Price_PU)<=2147483647:
+                    break
+                else:
+                    print('Enter valid price i.e., under Rs.2147483647')
+                    continue
+            #adding validation for final amount for that item
+            while True:
+                Qty = int(input("Enter quantity:"))
+                if Qty<=2147483647:
+                    Price = Price_PU * Qty
+                    if int(Price)<=2147483647:
+                        break
+                    else:
+                        print('please enter quantity correctly as total amount should be under Rs.2147483647')
+                        continue
+                else:
+                    print('Enter valid quantity')
+                    continue
             total_amount += Price
             cur.execute("INSERT INTO {inp} VALUES({},'{}',{},{},{})".format(
                 Sno, Item_Name, Price_PU, Qty, Price, inp=invoice_id))
@@ -64,6 +82,7 @@ def new_invoice(customer_name, mobile_number):
             ans = input("Do you want to add more items(Y/N):")
         cur.execute("select * from {inp}".format(inp=invoice_id))
         inv_table = from_db_cursor(cur)
+        inv_table.title = invoice_id
         print(inv_table)
 
         cur.execute(
@@ -111,6 +130,7 @@ def new_invoice(customer_name, mobile_number):
             ans = input("Do you want to add more items(Y/N):")
         cur.execute("select * from {inp}".format(inp=invoice_id))
         inv_table = from_db_cursor(cur)
+        inv_table.title = invoice_id
         print(inv_table)
 
         cur.execute(
@@ -126,6 +146,7 @@ def search_invoice_by_invoice_id(invoice_id_to_find):
     if result:
         cur.execute("select * from {}".format(invoice_id_to_find))
         to_print = from_db_cursor(cur)
+        to_print.title = invoice_id_to_find
         print(to_print)
     else:
         print("No such invoice id exists")
@@ -143,6 +164,7 @@ def search_invoice_by_customer_id(customer_name, mobile_number, date_of_billing)
             invoice_id_to_find = each_invoice[0]
             cur.execute("select * from {}".format(invoice_id_to_find))
             to_print = from_db_cursor(cur)
+            to_print.title = invoice_id_to_find
             print(to_print)
 
 
@@ -164,6 +186,7 @@ def customer_data(customer_name, mobile_number):
             .format(customer_id_filter))
         total_spent = str(cur.fetchone()[0])
         customer_data_table = PrettyTable()
+        customer_data_table.title = customer_id_filter
         customer_data_table.field_names = [
             "Customer Id", "Customer Name", "Mobile Number", "Date of First Buy", "Number of Purchases", "Total Amount Spent"]
         for a in if_customer_exists[0:]:
@@ -224,8 +247,8 @@ while True:
     choice = int(input("Enter your choice(1/2/3/4):"))
     # New Invoice
     if choice == 1:
+        customer_name = input("Enter customer name:")
         while True:
-            customer_name = input("Enter customer name:")
             mobile_number = input("Enter mobile number:")
             if mobile_number.isdigit() and len(mobile_number) == 10:
                 new_invoice(customer_name, mobile_number)
@@ -266,8 +289,8 @@ while True:
                 "Do you want to modify customer details?(Y/N):")
             if modify_maybe == 'Y':
                 print("Please enter new details of the customer:")
+                new_name = input("Enter Name:")
                 while True:
-                    new_name = input("Enter Name:")
                     new_number = input("Enter Mobile Number:")
                     if new_number.isdigit() and len(new_number) == 10:
                         modify_data(customer_name, mobile_number,
