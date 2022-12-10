@@ -53,7 +53,10 @@ def new_invoice(customer_name, mobile_number):
         while ans == 'Y':
             i += 1
             Sno = i
-            Item_Name = input("Item Name:")
+            while True:
+                Item_Name = input("Item Name:")
+                if len(Item_Name) <= 20:
+                    break
             # adding validation for price
             while True:
                 Price_PU = float(input("Enter Price of the item:"))
@@ -86,7 +89,7 @@ def new_invoice(customer_name, mobile_number):
         inv_table.title = invoice_id + "        " + \
             str(date_of_billing) + "        " + name
         print(inv_table)
-
+        print("TOTAL AMOUNT: Rs.{}".format(total_amount))
         cur.execute(
             "insert into Invoice_List VALUES('{}','{}','{}','{}','{}',{},{})".
             format(invoice_id, customer_id, date_of_billing, name, Mob_no, i, total_amount))
@@ -121,10 +124,35 @@ def new_invoice(customer_name, mobile_number):
         while ans == 'Y':
             i += 1
             Sno = i
-            Item_Name = input("Item Name:")
-            Price_PU = float(input("Enter Price of the item:"))
-            Qty = int(input("Enter quantity:"))
-            Price = Price_PU * Qty
+            while True:
+                Item_Name = input("Item Name:")
+                if len(Item_Name) <= 20:
+                    break
+                else:
+                    print('Enter item name under 20 characters long!')
+                    continue
+            # adding validation for price
+            while True:
+                Price_PU = float(input("Enter Price of the item:"))
+                if int(Price_PU) <= 2147483647:
+                    break
+                else:
+                    print('Enter valid price i.e., under Rs.2147483647')
+                    continue
+            # adding validation for final amount for that item
+            while True:
+                Qty = int(input("Enter quantity:"))
+                if Qty <= 2147483647:
+                    Price = Price_PU * Qty
+                    if int(Price) <= 2147483647:
+                        break
+                    else:
+                        print(
+                            'please enter quantity correctly as total amount should be under Rs.2147483647')
+                        continue
+                else:
+                    print('Enter valid quantity')
+                    continue
             total_amount += Price
             cur.execute("INSERT INTO {inp} VALUES({},'{}',{},{},{})".format(
                 Sno, Item_Name, Price_PU, Qty, Price, inp=invoice_id))
@@ -135,6 +163,7 @@ def new_invoice(customer_name, mobile_number):
         inv_table.title = invoice_id + "        " + \
             str(date_of_billing) + "        " + customer_name
         print(inv_table)
+        print("TOTAL AMOUNT: Rs.{}".format(total_amount))
 
         cur.execute(
             "insert into Invoice_List VALUES('{}','{}','{}','{}','{}',{},{})".
@@ -169,7 +198,13 @@ def search_invoice_by_invoice_id():
 def search_invoice_by_customer_id():
     while True:
         customer_name = input("Enter customer name:")
-        mobile_number = input("Enter mobile number:")
+        while True:
+            mobile_number = input("Enter mobile number:")
+            if len(mobile_number) == 10 and mobile_number.isdigit():
+                break
+            else:
+                print("Enter valid mobile number!")
+                continue
         date_billing = input("Enter date of billing:")
         cur.execute(
             "select * from Invoice_List WHERE (Customer_Name = '{}' AND Mobile_Number = '{}' AND Date_of_Billing = '{}') "
@@ -272,7 +307,14 @@ while True:
     print("2. Search Invoice")
     print("3. Customer Database")
     print("4. Exit")
-    choice = int(input("Enter your choice(1/2/3/4):"))
+
+    while True:
+        try:
+            choice = int(input("Enter your choice(1/2/3/4):"))
+            break
+        except ValueError:
+            print("Enter a valid choice!")
+            continue
     # New Invoice
     if choice == 1:
         customer_name = input("Enter customer name:")
@@ -288,7 +330,13 @@ while True:
     if choice == 2:
         print("1. By invoice id")
         print("2. By customer name, mobile number and date of billing")
-        choice2 = int(input("Enter your choice(1/2):"))
+        while True:
+            try:
+                choice2 = int(input("Enter your choice(1/2):"))
+                break
+            except ValueError:
+                print("Enter a valid choice!")
+                continue
         if choice2 == 1:
             search_invoice_by_invoice_id()
         else:
@@ -298,7 +346,12 @@ while True:
         print("Welcome to Customer Database!")
         print("Enter Customer Details")
         customer_name = input("Enter customer name:")
-        mobile_number = input("Enter mobile number:")
+        while True:
+            mobile_number = input("Enter mobile number:")
+            if mobile_number.isdigit() and len(mobile_number) == 10:
+                break
+            else:
+                print('Enter mobile number correctly!')
         customer_data(customer_name, mobile_number)
 
         cur.execute(
