@@ -57,6 +57,9 @@ def new_invoice(customer_name, mobile_number):
                 Item_Name = input("Item Name:")
                 if len(Item_Name) <= 20:
                     break
+                else:
+                    print('Enter item name under 20 characters long!')
+                    continue
             # adding validation for price
             while True:
                 Price_PU = float(input("Enter Price of the item:"))
