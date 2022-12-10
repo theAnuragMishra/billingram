@@ -54,23 +54,24 @@ def new_invoice(customer_name, mobile_number):
             i += 1
             Sno = i
             Item_Name = input("Item Name:")
-            #adding validation for price
+            # adding validation for price
             while True:
                 Price_PU = float(input("Enter Price of the item:"))
-                if int(Price_PU)<=2147483647:
+                if int(Price_PU) <= 2147483647:
                     break
                 else:
                     print('Enter valid price i.e., under Rs.2147483647')
                     continue
-            #adding validation for final amount for that item
+            # adding validation for final amount for that item
             while True:
                 Qty = int(input("Enter quantity:"))
-                if Qty<=2147483647:
+                if Qty <= 2147483647:
                     Price = Price_PU * Qty
-                    if int(Price)<=2147483647:
+                    if int(Price) <= 2147483647:
                         break
                     else:
-                        print('please enter quantity correctly as total amount should be under Rs.2147483647')
+                        print(
+                            'please enter quantity correctly as total amount should be under Rs.2147483647')
                         continue
                 else:
                     print('Enter valid quantity')
@@ -82,7 +83,8 @@ def new_invoice(customer_name, mobile_number):
             ans = input("Do you want to add more items(Y/N):")
         cur.execute("select * from {inp}".format(inp=invoice_id))
         inv_table = from_db_cursor(cur)
-        inv_table.title = invoice_id
+        inv_table.title = invoice_id + "        " + \
+            str(date_of_billing) + "        " + name
         print(inv_table)
 
         cur.execute(
@@ -130,7 +132,8 @@ def new_invoice(customer_name, mobile_number):
             ans = input("Do you want to add more items(Y/N):")
         cur.execute("select * from {inp}".format(inp=invoice_id))
         inv_table = from_db_cursor(cur)
-        inv_table.title = invoice_id
+        inv_table.title = invoice_id + "        " + \
+            str(date_of_billing) + "        " + customer_name
         print(inv_table)
 
         cur.execute(
@@ -139,33 +142,53 @@ def new_invoice(customer_name, mobile_number):
         cn.commit()
 
 
-def search_invoice_by_invoice_id(invoice_id_to_find):
-    stmt = "SHOW TABLES LIKE '{}'".format(invoice_id_to_find)
-    cur.execute(stmt)
-    result = cur.fetchone()
-    if result:
-        cur.execute("select * from {}".format(invoice_id_to_find))
-        to_print = from_db_cursor(cur)
-        to_print.title = invoice_id_to_find
-        print(to_print)
-    else:
-        print("No such invoice id exists")
-
-
-def search_invoice_by_customer_id(customer_name, mobile_number, date_of_billing):
-    cur.execute(
-        "select * from Invoice_List WHERE (Customer_Name = '{}' AND Mobile_Number = '{}' AND Date_of_Billing = '{}') "
-        .format(customer_name, mobile_number, date_billing))
-    if_invoice_exists = cur.fetchall()
-    if len(if_invoice_exists) == 0:
-        print("No customer with these credentials yet!")
-    else:
-        for each_invoice in if_invoice_exists:
-            invoice_id_to_find = each_invoice[0]
+def search_invoice_by_invoice_id():
+    while True:
+        invoice_id_to_find = input("Enter invoice id:")
+        stmt = "SHOW TABLES LIKE '{}'".format(invoice_id_to_find)
+        cur.execute(stmt)
+        result = cur.fetchone()
+        if result:
+            cur.execute(
+                "select * from Invoice_List where (Invoice_ID = '{}')".format(invoice_id_to_find))
+            x = cur.fetchall()
+            invoice_id_for_title = x[0][0]
+            name = x[0][3]
+            date = x[0][2]
             cur.execute("select * from {}".format(invoice_id_to_find))
             to_print = from_db_cursor(cur)
-            to_print.title = invoice_id_to_find
+            to_print.title = invoice_id_for_title + "        " + \
+                str(date) + "        " + name
             print(to_print)
+            break
+        else:
+            print("No such invoice id exists!")
+            continue
+
+
+def search_invoice_by_customer_id():
+    while True:
+        customer_name = input("Enter customer name:")
+        mobile_number = input("Enter mobile number:")
+        date_billing = input("Enter date of billing:")
+        cur.execute(
+            "select * from Invoice_List WHERE (Customer_Name = '{}' AND Mobile_Number = '{}' AND Date_of_Billing = '{}') "
+            .format(customer_name, mobile_number, date_billing))
+        if_invoice_exists = cur.fetchall()
+        if len(if_invoice_exists) == 0:
+            print("No customer with these credentials yet!")
+            continue
+        else:
+            for each_invoice in if_invoice_exists:
+                invoice_id_to_find = each_invoice[0]
+                name = each_invoice[3]
+                date = each_invoice[2]
+                cur.execute("select * from {}".format(invoice_id_to_find))
+                to_print = from_db_cursor(cur)
+                to_print.title = invoice_id_to_find + "        " + \
+                    str(date) + "        " + name
+                print(to_print)
+                break
 
 
 def customer_data(customer_name, mobile_number):
@@ -267,14 +290,9 @@ while True:
         print("2. By customer name, mobile number and date of billing")
         choice2 = int(input("Enter your choice(1/2):"))
         if choice2 == 1:
-            invoice_id_to_find = input("Enter invoice id:")
-            search_invoice_by_invoice_id(invoice_id_to_find)
+            search_invoice_by_invoice_id()
         else:
-            customer_name = input("Enter customer name:")
-            mobile_number = input("Enter mobile number:")
-            date_billing = input("Enter date of billing:")
-            search_invoice_by_customer_id(
-                customer_name, mobile_number, date_billing)
+            search_invoice_by_customer_id()
 
     if choice == 3:
         print("Welcome to Customer Database!")
