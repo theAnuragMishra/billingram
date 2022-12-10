@@ -222,7 +222,7 @@ def search_invoice_by_customer_id():
                 to_print.title = invoice_id_to_find + "        " + \
                     str(date) + "        " + name
                 print(to_print)
-                break
+            break
 
 
 def customer_data(customer_name, mobile_number):
@@ -336,8 +336,10 @@ while True:
                 continue
         if choice2 == 1:
             search_invoice_by_invoice_id()
-        else:
+        elif choice2 == 2:
             search_invoice_by_customer_id()
+        else:
+            print("Enter a valid choice!")
 
     if choice == 3:
         print("Welcome to Customer Database!")
