@@ -47,9 +47,6 @@ def new_invoice(customer_name, mobile_number):
         result = cur.fetchall()
         if len(result) != 0:
             cur.execute("drop table {}".format(invoice_id))
-        cur.execute(
-            "create table {inv}(SN integer primary key,Item_Name varchar(20),Price_Per_Unit integer ,Quantity integer, Price integer)"
-            .format(inv=invoice_id))
         while ans == 'Y':
             i += 1
             Sno = i
@@ -57,32 +54,35 @@ def new_invoice(customer_name, mobile_number):
                 Item_Name = input("Item Name:")
                 if len(Item_Name) <= 20:
                     break
-                else:
-                    print('Enter item name under 20 characters long!')
-                    continue
+                print('Enter item name under 20 characters long!')
             # adding validation for price
             while True:
-                Price_PU = float(input("Enter Price of the item:"))
-                if int(Price_PU) <= 2147483647:
-                    break
-                else:
-                    print('Enter valid price i.e., under Rs.2147483647')
-                    continue
+                try:
+                    Price_PU = float(input("Enter Price of the item:"))
+                    if int(Price_PU) <= 2147483647:
+                        break
+                    print('Enter a valid price i.e., under Rs.2147483647')
+                except ValueError:
+                    print('Enter a valid price i.e., a number')
             # adding validation for final amount for that item
             while True:
-                Qty = int(input("Enter quantity:"))
-                if Qty <= 2147483647:
-                    Price = Price_PU * Qty
-                    if int(Price) <= 2147483647:
-                        break
-                    else:
-                        print(
-                            'please enter quantity correctly as total amount should be under Rs.2147483647')
-                        continue
-                else:
+                try:
+                    Qty = int(input("Enter quantity:"))
+                    if Qty <= 2147483647:
+                        Price = Price_PU * Qty
+                        if int(Price) <= 2147483647:
+                            break
+                        else:
+                            print(
+                                'please enter quantity correctly as total amount should be under Rs.2147483647')
+                            continue
                     print('Enter valid quantity')
-                    continue
+                except ValueError:
+                    print('Enter a valid quantity i.e., a number')
             total_amount += Price
+            cur.execute(
+                "create table {inv}(SN integer primary key,Item_Name varchar(20),Price_Per_Unit integer ,Quantity integer, Price integer)"
+                .format(inv=invoice_id))
             cur.execute("INSERT INTO {inp} VALUES({},'{}',{},{},{})".format(
                 Sno, Item_Name, Price_PU, Qty, Price, inp=invoice_id))
             cn.commit()
@@ -121,9 +121,6 @@ def new_invoice(customer_name, mobile_number):
         result = cur.fetchall()
         if len(result) != 0:
             cur.execute("drop table {}".format(invoice_id))
-        cur.execute(
-            "create table {inv}(SN integer primary key,Item_Name varchar(20),Price_Per_Unit integer ,Quantity integer, Price integer)"
-            .format(inv=invoice_id))
         while ans == 'Y':
             i += 1
             Sno = i
@@ -131,32 +128,35 @@ def new_invoice(customer_name, mobile_number):
                 Item_Name = input("Item Name:")
                 if len(Item_Name) <= 20:
                     break
-                else:
-                    print('Enter item name under 20 characters long!')
-                    continue
+                print('Enter item name under 20 characters long!')
             # adding validation for price
             while True:
-                Price_PU = float(input("Enter Price of the item:"))
-                if int(Price_PU) <= 2147483647:
-                    break
-                else:
-                    print('Enter valid price i.e., under Rs.2147483647')
-                    continue
+                try:
+                    Price_PU = float(input("Enter Price of the item:"))
+                    if int(Price_PU) <= 2147483647:
+                        break
+                    print('Enter a valid price i.e., under Rs.2147483647')
+                except ValueError:
+                    print('Enter a valid price i.e., a number')
             # adding validation for final amount for that item
             while True:
-                Qty = int(input("Enter quantity:"))
-                if Qty <= 2147483647:
-                    Price = Price_PU * Qty
-                    if int(Price) <= 2147483647:
-                        break
-                    else:
-                        print(
-                            'please enter quantity correctly as total amount should be under Rs.2147483647')
-                        continue
-                else:
+                try:
+                    Qty = int(input("Enter quantity:"))
+                    if Qty <= 2147483647:
+                        Price = Price_PU * Qty
+                        if int(Price) <= 2147483647:
+                            break
+                        else:
+                            print(
+                                'please enter quantity correctly as total amount should be under Rs.2147483647')
+                            continue
                     print('Enter valid quantity')
-                    continue
+                except ValueError:
+                    print('Enter a valid quantity i.e., a number')
             total_amount += Price
+            cur.execute(
+                "create table {inv}(SN integer primary key,Item_Name varchar(20),Price_Per_Unit integer ,Quantity integer, Price integer)"
+                .format(inv=invoice_id))
             cur.execute("INSERT INTO {inp} VALUES({},'{}',{},{},{})".format(
                 Sno, Item_Name, Price_PU, Qty, Price, inp=invoice_id))
             cn.commit()
@@ -193,9 +193,7 @@ def search_invoice_by_invoice_id():
                 str(date) + "        " + name
             print(to_print)
             break
-        else:
-            print("No such invoice id exists!")
-            continue
+        print("No such invoice id exists!")
 
 
 def search_invoice_by_customer_id():
@@ -205,9 +203,7 @@ def search_invoice_by_customer_id():
             mobile_number = input("Enter mobile number:")
             if len(mobile_number) == 10 and mobile_number.isdigit():
                 break
-            else:
-                print("Enter valid mobile number!")
-                continue
+            print("Enter valid mobile number!")
         date_billing = input("Enter date of billing:")
         cur.execute(
             "select * from Invoice_List WHERE (Customer_Name = '{}' AND Mobile_Number = '{}' AND Date_of_Billing = '{}') "
@@ -326,9 +322,7 @@ while True:
             if mobile_number.isdigit() and len(mobile_number) == 10:
                 new_invoice(customer_name, mobile_number)
                 break
-            else:
-                print('Enter mobile number correctly!')
-                continue
+            print('Enter mobile number correctly!')
 
     if choice == 2:
         print("1. By invoice id")
@@ -375,9 +369,7 @@ while True:
                         modify_data(customer_name, mobile_number,
                                     new_name, new_number)
                         break
-                    else:
-                        print("Enter mobile number correctly!")
-                        continue
+                    print("Enter mobile number correctly!")
 
     if choice == 4:
         break
