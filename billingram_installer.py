@@ -31,7 +31,7 @@ if choice == "Y":
                 cursor.execute("use Billingram")
                 cursor.execute(
                     "create table if not exists Customer_Data(Customer_ID varchar(10) NOT NULL PRIMARY KEY,Name varchar(50) NOT NULL,Mobile_Number char(10) NOT NULL,Date_of_First_Buy date NOT NULL)")
-                cursor.execute("create table if not exists Invoice_List(Invoice_ID varchar(20) PRIMARY KEY NOT NULL,Customer_ID varchar(15) NOT NULL,Date_of_Billing date NOT NULL,Customer_Name varchar(50) NOT NULL,Mobile_Number char(10) NOT NULL,No_of_Items integer NOT NULL,Total_Amount integer NOT NULL)")
+                cursor.execute("create table if not exists Invoice_List(Invoice_ID varchar(20) PRIMARY KEY NOT NULL,Customer_ID varchar(15) NOT NULL,Date_of_Billing date NOT NULL,Customer_Name varchar(50) NOT NULL,Mobile_Number char(10) NOT NULL,No_of_Items integer NOT NULL,Total_Amount FLOAT NOT NULL)")
                 print("Created required database and tables.")
                 print("All records will be stored in the Billingram database.")
                 print("Thanks for installing Billingram!")

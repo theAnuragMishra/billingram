@@ -81,7 +81,7 @@ def new_invoice(customer_name, mobile_number):
                     print('Enter a valid quantity i.e., a number')
             total_amount += Price
             cur.execute(
-                "create table {inv}(SN integer primary key,Item_Name varchar(20),Price_Per_Unit FLOAT,Quantity integer, Price decimal FLOAT)"
+                "create table {inv}(SN integer primary key,Item_Name varchar(20),Price_Per_Unit FLOAT,Quantity integer, Price FLOAT)"
                 .format(inv=invoice_id))
             cur.execute("INSERT INTO {inp} VALUES({},'{}',{},{},{})".format(
                 Sno, Item_Name, Price_PU, Qty, Price, inp=invoice_id))
@@ -155,7 +155,7 @@ def new_invoice(customer_name, mobile_number):
                     print('Enter a valid quantity i.e., a number')
             total_amount += Price
             cur.execute(
-                "create table {inv}(SN integer primary key,Item_Name varchar(20),Price_Per_Unit integer ,Quantity integer, Price integer)"
+                "create table {inv}(SN integer primary key,Item_Name varchar(20),Price_Per_Unit FLOAT ,Quantity integer, Price FLOAT)"
                 .format(inv=invoice_id))
             cur.execute("INSERT INTO {inp} VALUES({},'{}',{},{},{})".format(
                 Sno, Item_Name, Price_PU, Qty, Price, inp=invoice_id))
