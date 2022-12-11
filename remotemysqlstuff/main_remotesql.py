@@ -1,4 +1,5 @@
 # Main Program
+from datetime import datetime
 import mysql.connector as sqltor
 from prettytable import PrettyTable
 from prettytable import from_db_cursor
@@ -204,7 +205,15 @@ def search_invoice_by_customer_id():
             if len(mobile_number) == 10 and mobile_number.isdigit():
                 break
             print("Enter valid mobile number!")
-        date_billing = input("Enter date of billing:")
+        while True:
+            date_billing = input("Enter date of billing:")
+            try:
+                if date_billing != datetime.strptime(date_billing, "%Y-%m-%d").strftime('%Y-%m-%d'):
+                    raise ValueError
+                break
+            except ValueError:
+                print("Enter date in the format YYYY-MM-DD, don't forget zeroes!")
+                continue
         cur.execute(
             "select * from Invoice_List WHERE (Customer_Name = '{}' AND Mobile_Number = '{}' AND Date_of_Billing = '{}') "
             .format(customer_name, mobile_number, date_billing))
