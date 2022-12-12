@@ -1,10 +1,10 @@
 <div align=center><h1>Billingram</h1>
-<p>
-Billingram is a bill generator and customer data managing software made with python.
-</p>
 <a href="https://twitter.com/GiuocoPianoSimp"><img src="https://img.shields.io/twitter/follow/GiuocoPianoSimp?style=social"></a>
 <a href="https://discord.gg/nhzEgqwBwp"><img src="https://img.shields.io/discord/947433833660317706?label=Discord&style=social"></a>
 <a href="https://www.youtube.com/channel/UC9DloEs6b9xLwtQQTe0F32g"><img src="https://img.shields.io/youtube/channel/subscribers/UC9DloEs6b9xLwtQQTe0F32g?label=YouTube&style=social"></a>
+<p>
+Billingram is a bill generator and customer data managing software made with python.
+</p>
 </div>
 
 ## Prerequisites
