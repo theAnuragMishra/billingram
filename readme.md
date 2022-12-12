@@ -1,6 +1,8 @@
-<div align=center><h1>Billingram</h1></div>
-
+<div align=center><h1>Billingram</h1>
+<p>
 Billingram is a bill generator and customer data managing software made with python.
+</p>
+</div>
 
 ## Prerequisites
 
