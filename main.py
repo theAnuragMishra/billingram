@@ -3,6 +3,7 @@ from datetime import datetime
 import mysql.connector as sqltor
 from prettytable import PrettyTable
 from prettytable import from_db_cursor
+import math
 
 
 def invoice_id_gen():
@@ -57,7 +58,7 @@ def new_invoice(customer_name, mobile_number):
     if len(result) != 0:
         cur.execute("drop table {}".format(invoice_id))
     cur.execute(
-        "create table {inv}(SN integer primary key,Item_Name varchar(20),Price_Per_Unit FLOAT,Quantity integer, Price FLOAT)"
+        "create table {inv}(SN integer primary key,Item_Name varchar(20),Price_Per_Unit decimal(10,2),Quantity integer, Price decimal(10,2))"
         .format(inv=invoice_id))
     while ans == 'Y':
         i += 1
@@ -103,10 +104,11 @@ def new_invoice(customer_name, mobile_number):
     inv_table.title = invoice_id + "        " + \
         str(date_of_billing) + "        " + customer_name
     print(inv_table)
-    print("TOTAL AMOUNT: Rs.{}".format(total_amount))
+    final_amount=round(total_amount,2)
+    print("TOTAL AMOUNT: Rs.{}".format(final_amount))
     cur.execute(
         "insert into Invoice_List VALUES('{}','{}','{}','{}','{}',{},{})".
-        format(invoice_id, customer_id, date_of_billing, customer_name, mobile_number, i, total_amount))
+        format(invoice_id, customer_id, date_of_billing, customer_name, mobile_number, i, final_amount))
     cn.commit()
 
 
