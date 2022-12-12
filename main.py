@@ -98,6 +98,8 @@ def new_invoice(customer_name, mobile_number):
         ans = input("Do you want to add more items(Y/N):")
     cur.execute("select * from {inp}".format(inp=invoice_id))
     inv_table = from_db_cursor(cur)
+    inv_table.align["Price_Per_Unit"] = "r"
+    inv_table.align["Price"] = "r"
     inv_table.title = invoice_id + "        " + \
         str(date_of_billing) + "        " + customer_name
     print(inv_table)
