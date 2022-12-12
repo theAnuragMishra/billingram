@@ -2,9 +2,9 @@
 <p>
 Billingram is a bill generator and customer data managing software made with python.
 </p>
-[![Twitter](https://img.shields.io/twitter/follow/GiuocoPianoSimp?style=social)](https://twitter.com/GiuocoPianoSimp)
-[![Discord](https://img.shields.io/discord/947433833660317706?label=Discord&style=social)](https://discord.gg/nhzEgqwBwp)
-[![YouTube](https://img.shields.io/youtube/channel/subscribers/UC9DloEs6b9xLwtQQTe0F32g?label=YouTube&style=social)](https://www.youtube.com/channel/UC9DloEs6b9xLwtQQTe0F32g)
+<a href="https://twitter.com/GiuocoPianoSimp"><img src="https://img.shields.io/twitter/follow/GiuocoPianoSimp?style=social"></a>
+<a href="https://discord.gg/nhzEgqwBwp"><img src="https://img.shields.io/discord/947433833660317706?label=Discord&style=social"></a>
+<a href="https://www.youtube.com/channel/UC9DloEs6b9xLwtQQTe0F32g"><img src="https://img.shields.io/youtube/channel/subscribers/UC9DloEs6b9xLwtQQTe0F32g?label=YouTube&style=social"></a>
 </div>
 
 ## Prerequisites
@@ -61,11 +61,5 @@ This option is used to view and edit customer data. It displays the data of the 
 ## Contributing
 
 To contribute to this project, fork this repository and make a pull request. I will review the changes and merge them if they are good. You can also open an issue if you find any bug or want to suggest a feature. I will try to fix the bug or add the feature as soon as possible.
-
-## Social media
-
-[![Twitter](https://img.shields.io/twitter/follow/GiuocoPianoSimp?style=social)](https://twitter.com/GiuocoPianoSimp)
-[![Discord](https://img.shields.io/discord/947433833660317706?label=Discord&style=social)](https://discord.gg/nhzEgqwBwp)
-[![YouTube](https://img.shields.io/youtube/channel/subscribers/UC9DloEs6b9xLwtQQTe0F32g?label=YouTube&style=social)](https://www.youtube.com/channel/UC9DloEs6b9xLwtQQTe0F32g)
 
 If you like this project, please star this repository. Thank you. :smile:
