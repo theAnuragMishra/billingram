@@ -42,7 +42,7 @@ Let's talk about each one by one.
 #### New invoice
 
 This option is used to generate a new invoice. It asks for the customer's name and phone number. Then it asks for Items, Quantity and Price of each item. After entering all the items, it asks for the discount and then generates the invoice.
-It creates a new table in database for each invoice and stores the invoice data in that table. It also stores the customer data in the `customer data` table. It also stores invoice number and date in the `invoice list` table.
+It creates a new table in database for each invoice and stores the invoice data in that table. It also stores the customer data in the `customer_data` table. It also stores invoice number and date in the `invoice_list` table.
 
 #### Search invoice
 
