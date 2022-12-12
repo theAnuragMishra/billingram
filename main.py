@@ -108,7 +108,7 @@ def new_invoice(customer_name, mobile_number):
     print("TOTAL AMOUNT: Rs.{}".format(final_amount))
     cur.execute(
         "insert into Invoice_List VALUES('{}','{}','{}','{}','{}',{},{})".
-        format(invoice_id, customer_id, date_of_billing, customer_name, mobile_number, i, total_amount))
+        format(invoice_id, customer_id, date_of_billing, customer_name, mobile_number, i, final_amount))
     cn.commit()
 
 
