@@ -56,6 +56,9 @@ def new_invoice(customer_name, mobile_number):
     result = cur.fetchall()
     if len(result) != 0:
         cur.execute("drop table {}".format(invoice_id))
+    cur.execute(
+        "create table {inv}(SN integer primary key,Item_Name varchar(20),Price_Per_Unit FLOAT,Quantity integer, Price FLOAT)"
+        .format(inv=invoice_id))
     while ans == 'Y':
         i += 1
         Sno = i
@@ -89,9 +92,6 @@ def new_invoice(customer_name, mobile_number):
             except ValueError:
                 print('Enter a valid quantity i.e., a number')
         total_amount += Price
-        cur.execute(
-            "create table {inv}(SN integer primary key,Item_Name varchar(20),Price_Per_Unit FLOAT,Quantity integer, Price FLOAT)"
-            .format(inv=invoice_id))
         cur.execute("INSERT INTO {inp} VALUES({},'{}',{},{},{})".format(
             Sno, Item_Name, Price_PU, Qty, Price, inp=invoice_id))
         cn.commit()
