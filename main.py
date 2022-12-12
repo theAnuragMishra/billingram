@@ -52,13 +52,12 @@ def new_invoice(customer_name, mobile_number):
     # Invoice Generation
     ans = 'Y'
     i = 0
-    total_amount = 0
     cur.execute("show tables like '{}'".format(invoice_id))
     result = cur.fetchall()
     if len(result) != 0:
         cur.execute("drop table {}".format(invoice_id))
     cur.execute(
-        "create table {inv}(SN integer primary key,Item_Name varchar(20),Price_Per_Unit decimal(10,2),Quantity integer, Price decimal(10,2))"
+        "create table {inv}(SN integer primary key,Item_Name varchar(20),Price_Per_Unit decimal(30,2),Quantity integer, Price decimal(50,2))"
         .format(inv=invoice_id))
     while ans == 'Y':
         i += 1
@@ -72,9 +71,7 @@ def new_invoice(customer_name, mobile_number):
         while True:
             try:
                 Price_PU = float(input("Enter Price of the item:"))
-                if int(Price_PU) <= 2147483647:
-                    break
-                print('Enter a valid price i.e., under Rs.2147483647')
+                break
             except ValueError:
                 print('Enter a valid price i.e., a number')
         # adding validation for final amount for that item
@@ -83,16 +80,10 @@ def new_invoice(customer_name, mobile_number):
                 Qty = int(input("Enter quantity:"))
                 if Qty <= 2147483647:
                     Price = Price_PU * Qty
-                    if int(Price) <= 2147483647:
-                        break
-                    else:
-                        print(
-                            'please enter quantity correctly as total amount should be under Rs.2147483647')
-                        continue
-                print('Enter valid quantity')
+                    break
+                print('Enter quantity under 2147483647')
             except ValueError:
                 print('Enter a valid quantity i.e., a number')
-        total_amount += Price
         cur.execute("INSERT INTO {inp} VALUES({},'{}',{},{},{})".format(
             Sno, Item_Name, Price_PU, Qty, Price, inp=invoice_id))
         cn.commit()
@@ -102,9 +93,11 @@ def new_invoice(customer_name, mobile_number):
     inv_table.align["Price_Per_Unit"] = "r"
     inv_table.align["Price"] = "r"
     inv_table.title = invoice_id + "        " + \
-        str(date_of_billing) + "        " + customer_name
+                      str(date_of_billing) + "        " + customer_name
     print(inv_table)
-    final_amount=round(total_amount,2)
+    cur.execute("select sum(price) from {}".format(invoice_id))
+    final_amount = cur.fetchall()[0][0]
+
     print("TOTAL AMOUNT: Rs.{}".format(final_amount))
     cur.execute(
         "insert into Invoice_List VALUES('{}','{}','{}','{}','{}',{},{})".
@@ -125,11 +118,13 @@ def search_invoice_by_invoice_id():
             invoice_id_for_title = x[0][0]
             name = x[0][3]
             date = x[0][2]
+            total_amount = round(x[0][6], 2)
             cur.execute("select * from {}".format(invoice_id_to_find))
             to_print = from_db_cursor(cur)
             to_print.title = invoice_id_for_title + "        " + \
-                str(date) + "        " + name
+                             str(date) + "        " + name
             print(to_print)
+            print(f"TOTAL AMOUNT: {total_amount}")
             break
         print("No such invoice id exists!")
 
@@ -163,11 +158,13 @@ def search_invoice_by_customer_id():
                 invoice_id_to_find = each_invoice[0]
                 name = each_invoice[3]
                 date = each_invoice[2]
+                total_amount = round(each_invoice[6],2)
                 cur.execute("select * from {}".format(invoice_id_to_find))
                 to_print = from_db_cursor(cur)
                 to_print.title = invoice_id_to_find + "        " + \
-                    str(date) + "        " + name
+                                 str(date) + "        " + name
                 print(to_print)
+                print(f"TOTAL AMOUNT: {total_amount}")
             break
 
 
@@ -191,7 +188,8 @@ def customer_data(customer_name, mobile_number):
         customer_data_table = PrettyTable()
         customer_data_table.title = customer_id_filter
         customer_data_table.field_names = [
-            "Customer Id", "Customer Name", "Mobile Number", "Date of First Buy", "Number of Purchases", "Total Amount Spent"]
+            "Customer Id", "Customer Name", "Mobile Number", "Date of First Buy", "Number of Purchases",
+            "Total Amount Spent"]
         for a in if_customer_exists[0:]:
             customer_data_table.add_row([
                 a[0], a[1], a[2], a[3], no_of_purchases, total_spent])
