@@ -18,7 +18,11 @@ if choice == "Y":
             host = input("Enter the name of the host:")
             user = input("Enter username:")
             password = input("Enter password:")
-            port = input("Enter port number:")
+            while True:
+                port = input("Enter port number:")
+                if port.isdigit():
+                    break
+                print("Invalid port number! Please enter a valid port number.")
             print("Connecting to MySQL Database......")
             cn = sqltor.connect(host=host,
                                 user=user, passwd=password, port=port)
