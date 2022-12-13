@@ -32,7 +32,7 @@ def new_invoice(customer_name, mobile_number):
     curdate = cur.fetchone()
     date_of_billing = curdate[0]
     cur.execute(
-        "select * from Invoice_List WHERE (Customer_Name = '{}' AND Mobile_Number = '{}') "
+        "select * from Invoice_List WHERE (Name = '{}' AND Mobile_Number = '{}') "
         .format(customer_name, mobile_number))
     if_customer_exists = cur.fetchall()
     # If customer is new
@@ -70,8 +70,11 @@ def new_invoice(customer_name, mobile_number):
         # adding validation for price
         while True:
             try:
-                Price_PU = float(input("Enter Price of the item:"))
-                break
+                Price_PU = (input("Enter Price of the item:"))
+                if len(Price_PU) <= 27:
+                    Price_PU = float(Price_PU)
+                    break
+                print("Enter price under 27 characters long!")
             except ValueError:
                 print('Enter a valid price i.e., a number')
         # adding validation for final amount for that item
@@ -93,15 +96,15 @@ def new_invoice(customer_name, mobile_number):
     inv_table.align["Price_Per_Unit"] = "r"
     inv_table.align["Price"] = "r"
     inv_table.title = invoice_id + "        " + \
-                      str(date_of_billing) + "        " + customer_name
+        str(date_of_billing) + "        " + customer_name
     print(inv_table)
     cur.execute("select sum(price) from {}".format(invoice_id))
-    final_amount = cur.fetchall()[0][0]
+    total_amount = cur.fetchall()[0][0]
 
-    print("TOTAL AMOUNT: Rs.{}".format(final_amount))
+    print("TOTAL AMOUNT: Rs.{}".format(total_amount))
     cur.execute(
         "insert into Invoice_List VALUES('{}','{}','{}','{}','{}',{},{})".
-        format(invoice_id, customer_id, date_of_billing, customer_name, mobile_number, i, final_amount))
+        format(invoice_id, customer_id, date_of_billing, customer_name, mobile_number, i, total_amount))
     cn.commit()
 
 
@@ -118,11 +121,11 @@ def search_invoice_by_invoice_id():
             invoice_id_for_title = x[0][0]
             name = x[0][3]
             date = x[0][2]
-            total_amount = round(x[0][6], 2)
+            total_amount = x[0][6]
             cur.execute("select * from {}".format(invoice_id_to_find))
             to_print = from_db_cursor(cur)
             to_print.title = invoice_id_for_title + "        " + \
-                             str(date) + "        " + name
+                str(date) + "        " + name
             print(to_print)
             print(f"TOTAL AMOUNT: {total_amount}")
             break
@@ -147,7 +150,7 @@ def search_invoice_by_customer_id():
                 print("Enter date in the format YYYY-MM-DD, don't forget zeroes!")
                 continue
         cur.execute(
-            "select * from Invoice_List WHERE (Customer_Name = '{}' AND Mobile_Number = '{}' AND Date_of_Billing = '{}') "
+            "select * from Invoice_List WHERE (Name = '{}' AND Mobile_Number = '{}' AND Date_of_Billing = '{}') "
             .format(customer_name, mobile_number, date_billing))
         if_invoice_exists = cur.fetchall()
         if len(if_invoice_exists) == 0:
@@ -158,11 +161,11 @@ def search_invoice_by_customer_id():
                 invoice_id_to_find = each_invoice[0]
                 name = each_invoice[3]
                 date = each_invoice[2]
-                total_amount = round(each_invoice[6],2)
+                total_amount = each_invoice[6]
                 cur.execute("select * from {}".format(invoice_id_to_find))
                 to_print = from_db_cursor(cur)
                 to_print.title = invoice_id_to_find + "        " + \
-                                 str(date) + "        " + name
+                    str(date) + "        " + name
                 print(to_print)
                 print(f"TOTAL AMOUNT: {total_amount}")
             break
@@ -211,7 +214,7 @@ def modify_data(customer_name, mobile_number, new_name, new_number):
             .format(new_name, new_number, customer_id_filter))
         cn.commit()
         cur.execute(
-            "UPDATE Invoice_List SET Customer_Name='{}',Mobile_Number='{}' WHERE Customer_ID='{}'"
+            "UPDATE Invoice_List SET Name='{}',Mobile_Number='{}' WHERE Customer_ID='{}'"
             .format(new_name, new_number, customer_id_filter))
         cn.commit()
         print("Updated Successfully!")
@@ -226,7 +229,11 @@ while True:
     try:
         user_name = input("Enter username:")
         password = input("Enter password:")
-        port_number = input("Enter port number:")
+        while True:
+            port_number = input("Enter port number:")
+            if port_number.isdigit():
+                break
+            print("Enter a valid port number!")
         print("Connecting to MySQL Database......")
         cn = sqltor.connect(charset='latin1',
                             host='localhost',
@@ -260,7 +267,11 @@ while True:
             continue
     # New Invoice
     if choice == 1:
-        customer_name = input("Enter customer name:")
+        while True:
+            customer_name = input("Enter customer name:")
+            if len(customer_name) <= 50:
+                break
+            print("Enter a name under 50 characters long!")
         while True:
             mobile_number = input("Enter mobile number:")
             if mobile_number.isdigit() and len(mobile_number) == 10:
@@ -308,7 +319,11 @@ while True:
                 "Do you want to modify customer details?(Y/N):")
             if modify_maybe == 'Y':
                 print("Please enter new details of the customer:")
-                new_name = input("Enter Name:")
+                while True:
+                    new_name = input("Enter Name:")
+                    if len(new_name) <= 50:
+                        break
+                    print("Enter a name under 50 characters long!")
                 while True:
                     new_number = input("Enter Mobile Number:")
                     if new_number.isdigit() and len(new_number) == 10:
