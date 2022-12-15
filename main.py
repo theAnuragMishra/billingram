@@ -57,7 +57,7 @@ def new_invoice(customer_name, mobile_number):
     if len(result) != 0:
         cur.execute("drop table {}".format(invoice_id))
     cur.execute(
-        "create table {inv}(SN integer primary key,Item_Name varchar(20),Price_Per_Unit decimal(30,2),Quantity integer, Price decimal(50,2))"
+        "create table {inv}(SN integer primary key,Item_Name varchar(20),Price_Per_Unit decimal(30,2),Quantity integer, `Discount(%)` decimal(7,2), Price decimal(50,2))"
         .format(inv=invoice_id))
     while ans == 'y':
         i += 1
@@ -93,6 +93,7 @@ def new_invoice(customer_name, mobile_number):
             discount = input(
                 'Enter discount in %(leave empty for no discount): ')
             if discount == "":
+                disc = 0
                 break
             else:
                 try:
@@ -105,8 +106,8 @@ def new_invoice(customer_name, mobile_number):
                 except ValueError:
                     print('Enter a valid discount in float or integer')
 
-        cur.execute("INSERT INTO {inp} VALUES({},'{}',{},{},{})".format(
-            Sno, item_name, price_per_unit, quantity, price, inp=invoice_id))
+        cur.execute("INSERT INTO {inp} VALUES({},'{}',{},{}, {},{})".format(
+            Sno, item_name, price_per_unit, quantity, disc, price, inp=invoice_id))
         cn.commit()
         ans = input("Do you want to add more items(y/n):")
     cur.execute("select * from {inp}".format(inp=invoice_id))
