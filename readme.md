@@ -18,15 +18,15 @@ Billingram is a bill generator and customer data managing software made with pyt
 
 1. Install python 3.6 or higher from [here](https://www.python.org/downloads/).
 2. Install mysql server from [here](https://dev.mysql.com/downloads/mysql/).
-3. Install mysql-connector-python library by running the following command in terminal:
+3. Install mysql-connector-python library by running the following command in terminal:  
    `pip install mysql-connector-python`.
 4. Install prettytable library by running the following command in terminal:
    `pip install prettytable`.
 5. Clone the repository by running the following command in terminal:  
    `git clone https://github.com/theAnuragMishra/billingram.git`.
 6. Open the `main.py` file in any text editor and change the `host`, `user`, `password` and `database` variables to your mysql server's credentials.
-7. Open terminal in the directory where you cloned the repository and run the following command:
-   `python billingram_installer.py`
+7. Open terminal in the directory where you cloned the repository and run the following command:  
+   `python billingram_installer.py`.  
    Enter charset = `latin1` and your mysql username and password when prompted.
 8. Billingram is now installed. Run the following command to start the program:
    `python main.py`.
