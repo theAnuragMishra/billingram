@@ -50,7 +50,7 @@ def new_invoice(customer_name, mobile_number):
         data = cur.fetchall()
         customer_id = data[0][0]
     # Invoice Generation
-    ans = 'Y'
+    ans = 'y'
     i = 0
     cur.execute("show tables like '{}'".format(invoice_id))
     result = cur.fetchall()
@@ -59,7 +59,7 @@ def new_invoice(customer_name, mobile_number):
     cur.execute(
         "create table {inv}(SN integer primary key,Item_Name varchar(20),Price_Per_Unit decimal(30,2),Quantity integer, Price decimal(50,2))"
         .format(inv=invoice_id))
-    while ans == 'Y':
+    while ans == 'y':
         i += 1
         Sno = i
         while True:
@@ -81,16 +81,29 @@ def new_invoice(customer_name, mobile_number):
         while True:
             try:
                 Qty = int(input("Enter quantity:"))
-                if Qty <= 2147483647:
+                if Qty <= 2147483647 and Qty >= 0:
                     Price = Price_PU * Qty
                     break
-                print('Enter quantity under 2147483647')
+                print('Enter quantity under 2147483647 and greater than 0!')
             except ValueError:
                 print('Enter a valid quantity i.e., a number')
+
+        # adding discount
+        while True:
+            try:
+                disc = float(input('Enter discount in %(if any)='))
+                if disc >= 0:
+                    disc_amount = (disc/100)*Price
+                    Price = Price-disc_amount
+                    break
+                print('Enter a positive discount value!')
+            except ValueError:
+                print('Enter a valid discount in float or integer')
+
         cur.execute("INSERT INTO {inp} VALUES({},'{}',{},{},{})".format(
             Sno, Item_Name, Price_PU, Qty, Price, inp=invoice_id))
         cn.commit()
-        ans = input("Do you want to add more items(Y/N):")
+        ans = input("Do you want to add more items(y/n):")
     cur.execute("select * from {inp}".format(inp=invoice_id))
     inv_table = from_db_cursor(cur)
     inv_table.align["Price_Per_Unit"] = "r"
@@ -102,6 +115,8 @@ def new_invoice(customer_name, mobile_number):
     total_amount = cur.fetchall()[0][0]
 
     print("TOTAL AMOUNT: Rs.{}".format(total_amount))
+    print("Thank You for shopping with us!")
+    print("-" * 50)
     cur.execute(
         "insert into Invoice_List VALUES('{}','{}','{}','{}','{}',{},{})".
         format(invoice_id, customer_id, date_of_billing, customer_name, mobile_number, i, total_amount))
@@ -110,7 +125,13 @@ def new_invoice(customer_name, mobile_number):
 
 def search_invoice_by_invoice_id():
     while True:
-        invoice_id_to_find = input("Enter invoice id:")
+        print("-" * 50)
+        print("SEARCH INVOICE BY INVOICE ID")
+        print("............................")
+        invoice_id_to_find = input(
+            "Enter invoice id: ")
+        if invoice_id_to_find == "back":
+            break
         stmt = "SHOW TABLES LIKE '{}'".format(invoice_id_to_find)
         cur.execute(stmt)
         result = cur.fetchone()
@@ -128,13 +149,20 @@ def search_invoice_by_invoice_id():
                 str(date) + "        " + name
             print(to_print)
             print(f"TOTAL AMOUNT: {total_amount}")
-            break
+            # print("-"*25)
+            continue
         print("No such invoice id exists!")
+        # print("-"*25)
 
 
 def search_invoice_by_customer_id():
     while True:
+        print("-"*25)
+        print("SEARCH INVOICE BY NAME, MOBILE NUMBER AND DATE OF BILLING")
+        print(".........................................................")
         customer_name = input("Enter customer name:")
+        if customer_name == "back":
+            break
         while True:
             mobile_number = input("Enter mobile number:")
             if len(mobile_number) == 10 and mobile_number.isdigit():
@@ -155,7 +183,6 @@ def search_invoice_by_customer_id():
         if_invoice_exists = cur.fetchall()
         if len(if_invoice_exists) == 0:
             print("No customer with these credentials yet!")
-            continue
         else:
             for each_invoice in if_invoice_exists:
                 invoice_id_to_find = each_invoice[0]
@@ -168,7 +195,7 @@ def search_invoice_by_customer_id():
                     str(date) + "        " + name
                 print(to_print)
                 print(f"TOTAL AMOUNT: {total_amount}")
-            break
+                # print("-"*25)
 
 
 def customer_data(customer_name, mobile_number):
@@ -179,7 +206,6 @@ def customer_data(customer_name, mobile_number):
     if len(if_customer_exists) == 0:
         print("No customer with these credentials yet!")
     else:
-        print("Fetching Customer Details!")
         customer_id_filter = if_customer_exists[0][0]
         cur.execute(
             "select * from Invoice_List WHERE(Customer_ID='{}')".format(customer_id_filter))
@@ -206,9 +232,9 @@ def modify_data(customer_name, mobile_number, new_name, new_number):
     if_customer_exists = cur.fetchall()
     customer_id_filter = if_customer_exists[0][0]
     if_prompt = input(
-        "Do you want to implement these changes in Customer Database?(Y/N):")
+        "Do you want to implement these changes in Customer Database?(y/n):")
 
-    if if_prompt == 'Y':
+    if if_prompt == 'y':
         cur.execute(
             "UPDATE Customer_Data SET Name='{}',Mobile_Number='{}' WHERE Customer_ID='{}'"
             .format(new_name, new_number, customer_id_filter))
@@ -218,10 +244,12 @@ def modify_data(customer_name, mobile_number, new_name, new_number):
             .format(new_name, new_number, customer_id_filter))
         cn.commit()
         print("Updated Successfully!")
+        # print("-" * 25)
+    # else:
+        # print("-" * 25)
 
-
-# Starts from here
-print("Accessing Billingram Database.....")
+        # Starts from here
+print("Accessing Database.....")
 print("Authentication required!")
 
 # LOGIN PROMPT
@@ -248,89 +276,89 @@ while True:
     except sqltor.errors.DatabaseError:
         print("Invalid Credentials! Try Again.")
 # Billingram Menu
-print("=" * 50)
-print("UNNAMED SUPERMARKET")
-print("TAGLINE")
+print("-" * 50)
+
 while True:
-    print("[Billingram]-V.1.0")
-    print("1. New Invoice")
-    print("2. Search Invoice")
-    print("3. Customer Database")
-    print("4. Exit")
+    print("Billingram 1.0.0")
+    print("-" * 25)
+    print("New Invoice/Search Invoice/Customer DataBase/Exit")
 
-    while True:
-        try:
-            choice = int(input("Enter your choice(1/2/3/4):"))
-            break
-        except ValueError:
-            print("Enter a valid choice!")
-            continue
+    choice = input("Enter your choice(n/s/c/e):")
     # New Invoice
-    if choice == 1:
+    if choice == "n":
         while True:
-            customer_name = input("Enter customer name:")
-            if len(customer_name) <= 50:
+            # print("-" * 25)
+            print("NEW INVOICE")
+            print("...........")
+            while True:
+                customer_name = input("Enter customer name:")
+                if len(customer_name) <= 50:
+                    break
+                print("Enter a name under 50 characters long!")
+            if customer_name == "back":
+                print("-" * 25)
                 break
-            print("Enter a name under 50 characters long!")
-        while True:
-            mobile_number = input("Enter mobile number:")
-            if mobile_number.isdigit() and len(mobile_number) == 10:
-                new_invoice(customer_name, mobile_number)
-                break
-            print('Enter mobile number correctly!')
-
-    if choice == 2:
-        print("1. By invoice id")
-        print("2. By customer name, mobile number and date of billing")
-        while True:
-            try:
-                choice2 = int(input("Enter your choice(1/2):"))
-                break
-            except ValueError:
-                print("Enter a valid choice!")
-                continue
-        if choice2 == 1:
-            search_invoice_by_invoice_id()
-        elif choice2 == 2:
-            search_invoice_by_customer_id()
-        else:
-            print("Enter a valid choice!")
-
-    if choice == 3:
-        print("Welcome to Customer Database!")
-        print("Enter Customer Details")
-        customer_name = input("Enter customer name:")
-        while True:
-            mobile_number = input("Enter mobile number:")
-            if mobile_number.isdigit() and len(mobile_number) == 10:
-                break
-            else:
+            while True:
+                mobile_number = input("Enter mobile number:")
+                if mobile_number.isdigit() and len(mobile_number) == 10:
+                    break
                 print('Enter mobile number correctly!')
-        customer_data(customer_name, mobile_number)
+            new_invoice(customer_name, mobile_number)
 
-        cur.execute(
-            "select * from Customer_Data WHERE (Name = '{}' AND Mobile_Number = '{}') "
-            .format(customer_name, mobile_number))
-        if_customer_exists = cur.fetchall()
-        if len(if_customer_exists) == 0:
-            pass
-        else:
-            modify_maybe = input(
-                "Do you want to modify customer details?(Y/N):")
-            if modify_maybe == 'Y':
-                print("Please enter new details of the customer:")
-                while True:
-                    new_name = input("Enter Name:")
-                    if len(new_name) <= 50:
-                        break
-                    print("Enter a name under 50 characters long!")
-                while True:
-                    new_number = input("Enter Mobile Number:")
-                    if new_number.isdigit() and len(new_number) == 10:
-                        modify_data(customer_name, mobile_number,
-                                    new_name, new_number)
-                        break
-                    print("Enter mobile number correctly!")
+    if choice == "s":
+        while True:
+            print("-" * 25)
+            print("SEARCH INVOICE")
+            print(".............")
+            print("By Invoice Id/By Name,Mobile Number, Date")
+            choice2 = input("Enter your choice(i/d):")
+            if choice2 == "back":
+                break
+            if choice2 == "i":
+                search_invoice_by_invoice_id()
+            elif choice2 == "d":
+                search_invoice_by_customer_id()
+            else:
+                print("Enter a valid choice!")
 
-    if choice == 4:
+    if choice == "c":
+        while True:
+            print("-" * 25)
+            print("CUSTOMER DATABASE")
+            print(".................")
+            customer_name = input("Enter customer name:")
+            if customer_name == "back":
+                break
+            while True:
+                mobile_number = input("Enter mobile number:")
+                if mobile_number.isdigit() and len(mobile_number) == 10:
+                    break
+                print('Enter mobile number correctly!')
+            customer_data(customer_name, mobile_number)
+
+            cur.execute(
+                "select * from Customer_Data WHERE (Name = '{}' AND Mobile_Number = '{}') "
+                .format(customer_name, mobile_number))
+            if_customer_exists = cur.fetchall()
+            if len(if_customer_exists) == 0:
+                continue
+            else:
+                modify_maybe = input(
+                    "Do you want to modify customer details?(y/n):")
+                if modify_maybe == 'y':
+                    print("Please enter new details of the customer:")
+                    while True:
+                        new_name = input("Enter new Name:")
+                        if len(new_name) <= 50:
+                            break
+                        print("Enter a name under 50 characters long!")
+                    while True:
+                        new_number = input("Enter new Mobile Number:")
+                        if new_number.isdigit() and len(new_number) == 10:
+                            break
+                        print("Enter mobile number correctly!")
+                    modify_data(customer_name, mobile_number,
+                                new_name, new_number)
+
+    if choice == "e":
         break
