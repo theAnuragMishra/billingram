@@ -90,15 +90,19 @@ def new_invoice(customer_name, mobile_number):
 
         # adding discount
         while True:
-            try:
-                disc = float(input('Enter discount in %(if any)='))
-                if disc >= 0:
-                    disc_amount = (disc/100)*Price
-                    Price = Price-disc_amount
-                    break
-                print('Enter a positive discount value!')
-            except ValueError:
-                print('Enter a valid discount in float or integer')
+            discount = input('Enter discount in %(leave empty for no discount): ')
+            if discount == "":
+                break
+            else:
+                try:
+                    disc = float(discount)
+                    if disc >= 0:
+                        disc_amount = (disc/100)*Price
+                        Price = Price-disc_amount
+                        break
+                    print('Enter a positive discount value!')
+                except ValueError:
+                    print('Enter a valid discount in float or integer')
 
         cur.execute("INSERT INTO {inp} VALUES({},'{}',{},{},{})".format(
             Sno, Item_Name, Price_PU, Qty, Price, inp=invoice_id))
