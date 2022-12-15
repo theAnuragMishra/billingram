@@ -63,16 +63,16 @@ def new_invoice(customer_name, mobile_number):
         i += 1
         Sno = i
         while True:
-            Item_Name = input("Item Name:")
-            if len(Item_Name) <= 20:
+            item_name = input("Item Name:")
+            if len(item_name) <= 20:
                 break
             print('Enter item name under 20 characters long!')
         # adding validation for price
         while True:
             try:
-                Price_PU = (input("Enter Price of the item:"))
-                if len(Price_PU) <= 27:
-                    Price_PU = float(Price_PU)
+                price_per_unit = (input("Enter Price of the item:"))
+                if len(price_per_unit) <= 27:
+                    price_per_unit = float(price_per_unit)
                     break
                 print("Enter price under 27 characters long!")
             except ValueError:
@@ -80,9 +80,9 @@ def new_invoice(customer_name, mobile_number):
         # adding validation for final amount for that item
         while True:
             try:
-                Qty = int(input("Enter quantity:"))
-                if Qty <= 2147483647 and Qty >= 0:
-                    Price = Price_PU * Qty
+                quantity = int(input("Enter quantity:"))
+                if 2147483647 >= quantity >= 0:
+                    price = price_per_unit * quantity
                     break
                 print('Enter quantity under 2147483647 and greater than 0!')
             except ValueError:
@@ -90,22 +90,23 @@ def new_invoice(customer_name, mobile_number):
 
         # adding discount
         while True:
-            discount = input('Enter discount in %(leave empty for no discount): ')
+            discount = input(
+                'Enter discount in %(leave empty for no discount): ')
             if discount == "":
                 break
             else:
                 try:
                     disc = float(discount)
-                    if disc >= 0:
-                        disc_amount = (disc/100)*Price
-                        Price = Price-disc_amount
+                    if 0 <= disc <= 100:
+                        disc_amount = (disc/100)*price
+                        price = price-disc_amount
                         break
-                    print('Enter a positive discount value!')
+                    print('Enter a positive discount value <=100%!')
                 except ValueError:
                     print('Enter a valid discount in float or integer')
 
         cur.execute("INSERT INTO {inp} VALUES({},'{}',{},{},{})".format(
-            Sno, Item_Name, Price_PU, Qty, Price, inp=invoice_id))
+            Sno, item_name, price_per_unit, quantity, price, inp=invoice_id))
         cn.commit()
         ans = input("Do you want to add more items(y/n):")
     cur.execute("select * from {inp}".format(inp=invoice_id))
@@ -115,7 +116,7 @@ def new_invoice(customer_name, mobile_number):
     inv_table.title = invoice_id + "        " + \
         str(date_of_billing) + "        " + customer_name
     print(inv_table)
-    cur.execute("select sum(price) from {}".format(invoice_id))
+    cur.execute("select sum(Price) from {}".format(invoice_id))
     total_amount = cur.fetchall()[0][0]
 
     print("TOTAL AMOUNT: Rs.{}".format(total_amount))
@@ -251,6 +252,7 @@ def modify_data(customer_name, mobile_number, new_name, new_number):
         # print("-" * 25)
     # else:
         # print("-" * 25)
+
 
         # Starts from here
 print("Accessing Database.....")
