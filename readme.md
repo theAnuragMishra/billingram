@@ -22,8 +22,7 @@ Billingram is a bill generator and customer data managing software made with pyt
    `pip install mysql-connector-python`.
 4. Install prettytable library by running the following command in terminal
    `pip install prettytable`.
-5. Clone the repository by running the following command in terminal
-   `git clone https://github.com/theAnuragMishra/billingram.git`.
+5. Clone the repository by running the following command in terminal `git clone https://github.com/theAnuragMishra/billingram.git`.
 6. Open the `main.py` file in any text editor and change the `host`, `user`, `password` and `database` variables to your mysql server's credentials.
 7. Open terminal in the directory where you cloned the repository and run the following command:
    `python billingram_installer.py`
