@@ -49,18 +49,26 @@ Let's talk about each one by one.
 #### New invoice
 
 ![1671114028390](image/readme/1671114028390.png)
+
 This option is used to generate a new invoice. It asks for the customer's name and phone number.
+
 ![1671114080424](image/readme/1671114080424.png)
 
 Note: Enter `back` as the customer name to go back to the main menu.
+
 ![1671114511688](image/readme/1671114511688.png)
 
 Then it asks for Items, Quantity and Price of each item. After entering all the items, it asks for the discount and then generates the invoice.
 It creates a new table in database for each invoice and stores the invoice data in that table. The table name is the invoice number.
+
 ![1671114271741](image/readme/1671114271741.png)
+
 It also stores the customer data in the `customer_data` table and the invoice number and the date in the `invoice_list` table.
+
 ![1671114389844](image/readme/1671114389844.png)
+
 ![1671114409772](image/readme/1671114409772.png)
+
 Note: If you enter the same customer name and phone number again, it will not create a new entry in the `customer_data` table. It will just update the total amount spent by that customer.
 
 ![1671114488296](image/readme/1671114488296.png)
@@ -68,23 +76,29 @@ Note: If you enter the same customer name and phone number again, it will not cr
 #### Search invoice
 
 There are two options to look for an invoice in the database:
+
 ![1671114578800](image/readme/1671114578800.png)
 
 Note: Enter `back` as the invoice number to go back to the main menu.
+
 ![1671115773333](image/readme/1671115773333.png)
 
 1. Search by invoice number (i)
 
    ![1671114675512](image/readme/1671114675512.png)
+
    Note: The invoice number is the name of the table in which the invoice data is stored and is of the format `invoicen` where n is the number of invoice.
    Note: Enter `back` as the invoice number to go back to the previous menu.
 
    ![1671115056943](image/readme/1671115056943.png)
 
 2. Search by customer name, mobile number and date (d)
+
    ![1671114906742](image/readme/1671114906742.png)
+
    Note: It displays all the invoices of the customer whose name, mobile number and date you enter.
    Note: Enter `back` as the customer name to go back to the previous menu.
+
    ![1671115033660](image/readme/1671115033660.png)
 
 #### View and edit customer data
@@ -92,17 +106,25 @@ Note: Enter `back` as the invoice number to go back to the main menu.
 This option is used to view and edit customer data. It displays the data of the customer whose data you enter.
 
 ![1671115113405](image/readme/1671115113405.png)
+
 Note: Enter `back` as the customer name to go back to the main menu.
+
 ![1671115725560](image/readme/1671115725560.png)
 
 It also gives you an option to edit the customer data.
+
 ![1671115134268](image/readme/1671115134268.png)
+
 Press "n" to go back to the previous menu without editing. Press "y" to edit the customer data.
+
 ![1671115184139](image/readme/1671115184139.png)
+
 After you're done editing, press "y" to save the changes. Press "n" to discard the changes.
 
 ![1671115207165](image/readme/1671115207165.png)
+
 ![1671115229352](image/readme/1671115229352.png)
+
 `Mahi` is changed to `Mahii` and `4545454545` is changed to `4564564567` in both the tables, as desired.
 
 ## Contributing
