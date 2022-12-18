@@ -8,7 +8,7 @@ print("Required softwares to run Billingram:")
 print("1. Python 3.6 or above")
 print("2. MySQL")
 print("3. Python modules: mysql-connector-python, prettytable")
-print("In order to install Billingram, please make sure the essentials mentioned above are already installed in your pc.")
+print("In order to install Billingram, please make sure the essentials mentioned above are already installed on your pc.")
 choice = input("Do you want to install Billingram(y/n): ")
 if choice == "y":
     while True:
