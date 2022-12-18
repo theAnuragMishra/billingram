@@ -63,14 +63,14 @@ def new_invoice(customer_name, mobile_number):
         i += 1
         Sno = i
         while True:
-            item_name = input("Item Name:")
+            item_name = input("Item Name: ")
             if len(item_name) <= 20:
                 break
             print('Enter item name under 20 characters long!')
         # adding validation for price
         while True:
             try:
-                price_per_unit = (input("Enter Price of the item:"))
+                price_per_unit = (input("Enter Price of the item: "))
                 if len(price_per_unit) <= 27:
                     price_per_unit = float(price_per_unit)
                     break
@@ -80,7 +80,7 @@ def new_invoice(customer_name, mobile_number):
         # adding validation for final amount for that item
         while True:
             try:
-                quantity = int(input("Enter quantity:"))
+                quantity = int(input("Enter quantity: "))
                 if 2147483647 >= quantity >= 0:
                     price = price_per_unit * quantity
                     break
@@ -109,7 +109,7 @@ def new_invoice(customer_name, mobile_number):
         cur.execute("INSERT INTO {inp} VALUES({},'{}',{},{}, {},{})".format(
             Sno, item_name, price_per_unit, quantity, disc, price, inp=invoice_id))
         cn.commit()
-        ans = input("Do you want to add more items(y/n):")
+        ans = input("Do you want to add more items(y/n): ")
     cur.execute("select * from {inp}".format(inp=invoice_id))
     inv_table = from_db_cursor(cur)
     inv_table.align["Price_Per_Unit"] = "r"
@@ -166,16 +166,16 @@ def search_invoice_by_customer_id():
         print("-"*25)
         print("SEARCH INVOICE BY NAME, MOBILE NUMBER AND DATE OF BILLING")
         print(".........................................................")
-        customer_name = input("Enter customer name:")
+        customer_name = input("Enter customer name: ")
         if customer_name == "back":
             break
         while True:
-            mobile_number = input("Enter mobile number:")
+            mobile_number = input("Enter mobile number: ")
             if len(mobile_number) == 10 and mobile_number.isdigit():
                 break
             print("Enter valid mobile number!")
         while True:
-            date_billing = input("Enter date of billing:")
+            date_billing = input("Enter date of billing: ")
             try:
                 if date_billing != datetime.strptime(date_billing, "%Y-%m-%d").strftime('%Y-%m-%d'):
                     raise ValueError
@@ -238,7 +238,7 @@ def modify_data(customer_name, mobile_number, new_name, new_number):
     if_customer_exists = cur.fetchall()
     customer_id_filter = if_customer_exists[0][0]
     if_prompt = input(
-        "Do you want to implement these changes in Customer Database?(y/n):")
+        "Do you want to implement these changes in Customer Database?(y/n): ")
 
     if if_prompt == 'y':
         cur.execute(
@@ -262,10 +262,10 @@ print("Authentication required!")
 # LOGIN PROMPT
 while True:
     try:
-        user_name = input("Enter username:")
-        password = input("Enter password:")
+        user_name = input("Enter username: ")
+        password = input("Enter password: ")
         while True:
-            port_number = input("Enter port number:")
+            port_number = input("Enter port number: ")
             if port_number.isdigit():
                 break
             print("Enter a valid port number!")
@@ -290,7 +290,7 @@ while True:
     print("-" * 25)
     print("New Invoice/Search Invoice/Customer DataBase/Exit")
 
-    choice = input("Enter your choice(n/s/c/e):")
+    choice = input("Enter your choice(n/s/c/e): ")
     # New Invoice
     if choice == "n":
         while True:
@@ -298,7 +298,7 @@ while True:
             print("NEW INVOICE")
             print("...........")
             while True:
-                customer_name = input("Enter customer name:")
+                customer_name = input("Enter customer name: ")
                 if len(customer_name) <= 50:
                     break
                 print("Enter a name under 50 characters long!")
@@ -306,7 +306,7 @@ while True:
                 print("-" * 25)
                 break
             while True:
-                mobile_number = input("Enter mobile number:")
+                mobile_number = input("Enter mobile number: ")
                 if mobile_number.isdigit() and len(mobile_number) == 10:
                     break
                 print('Enter mobile number correctly!')
@@ -318,7 +318,7 @@ while True:
             print("SEARCH INVOICE")
             print(".............")
             print("By Invoice Id/By Name,Mobile Number, Date")
-            choice2 = input("Enter your choice(i/d):")
+            choice2 = input("Enter your choice(i/d): ")
             if choice2 == "back":
                 break
             if choice2 == "i":
@@ -333,11 +333,11 @@ while True:
             print("-" * 25)
             print("CUSTOMER DATABASE")
             print(".................")
-            customer_name = input("Enter customer name:")
+            customer_name = input("Enter customer name: ")
             if customer_name == "back":
                 break
             while True:
-                mobile_number = input("Enter mobile number:")
+                mobile_number = input("Enter mobile number: ")
                 if mobile_number.isdigit() and len(mobile_number) == 10:
                     break
                 print('Enter mobile number correctly!')
@@ -351,16 +351,16 @@ while True:
                 continue
             else:
                 modify_maybe = input(
-                    "Do you want to modify customer details?(y/n):")
+                    "Do you want to modify customer details?(y/n): ")
                 if modify_maybe == 'y':
                     print("Please enter new details of the customer:")
                     while True:
-                        new_name = input("Enter new Name:")
+                        new_name = input("Enter new Name: ")
                         if len(new_name) <= 50:
                             break
                         print("Enter a name under 50 characters long!")
                     while True:
-                        new_number = input("Enter new Mobile Number:")
+                        new_number = input("Enter new Mobile Number: ")
                         if new_number.isdigit() and len(new_number) == 10:
                             break
                         print("Enter mobile number correctly!")

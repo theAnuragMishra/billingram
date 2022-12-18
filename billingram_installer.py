@@ -9,17 +9,17 @@ print("1. Python 3.6 or above")
 print("2. MySQL")
 print("3. Python modules: mysql-connector-python, prettytable")
 print("In order to install Billingram, please make sure the essentials mentioned above are already installed in your pc.")
-choice = input("Do you want to install Billingram(Y/N):")
-if choice == "Y":
+choice = input("Do you want to install Billingram(y/n): ")
+if choice == "y":
     while True:
         try:
             print(
                 "Please enter your MySQL credentials in order to connect MySQL database.")
-            host = input("Enter the name of the host:")
-            user = input("Enter username:")
-            password = input("Enter password:")
+            host = input("Enter the name of the host: ")
+            user = input("Enter username: ")
+            password = input("Enter password: ")
             while True:
-                port = input("Enter port number:")
+                port = input("Enter port number: ")
                 if port.isdigit():
                     break
                 print("Invalid port number! Please enter a valid port number.")
@@ -43,5 +43,5 @@ if choice == "Y":
                 break
         except (sqltor.errors.InterfaceError, sqltor.errors.ProgrammingError, sqltor.errors.DatabaseError) as e:
             print("Invalid Credentials! Re-run the program to try again.")
-elif choice == "N":
-    print("Close the installer. If you want to install Billingram, kindly re-run the program.")
+elif choice == "n":
+    print("Installer closed! If you want to install Billingram, kindly re-run the program.")
